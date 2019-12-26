@@ -7,7 +7,7 @@ Vue.use(Router);
 // Pages
 import Home from "./pages/Home.vue";
 import NotFound from "./pages/404.vue";
-import notify from "./pages/Notify.vue";
+import Notify from "./pages/NotifyPage.vue";
 
 // Routing
 export default new Router({
