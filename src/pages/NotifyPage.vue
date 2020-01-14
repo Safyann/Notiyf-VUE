@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     messages() {
-      return this.$store.getters.getMessages;
+      return this.$store.getters.getMessagesMain;
     }
   },
   methods: {
@@ -73,8 +73,21 @@ export default {
       axios
         .get("https://tocode.ru/static/c/vue-pro/notifyApi.php")
         .then(response => {
-          let res = response.data.notify;
-          this.$store.dispatch("setMessages", res);
+          let res = response.data.notify,
+            messages = [],
+            messagesMain = [];
+
+          //filter
+          for (let i = 0; i < res.length; i++) {
+            if (res[i].main) {
+              messagesMain.push(res[i]);
+            } else {
+              messages.push(res[i]);
+            }
+          }
+
+          this.$store.dispatch("setMessages", messages);
+          this.$store.dispatch("setMessagesMain", messagesMain);
         })
         .catch(error => {
           console.log(error);

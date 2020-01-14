@@ -2,9 +2,12 @@
   <table>
     <transition-group name="list" tag="tbody">
       <tr v-for="message in messages" :key="message.title">
-        <td> <span>{{ message.title }}</span> </td>
+        <td>
+          <span>{{ message.title }}</span>
+        </td>
       </tr>
     </transition-group>
+    <button @click="loadMore" class="btn btnPrimary">Load more</button>
   </table>
 </template>
 
@@ -15,8 +18,11 @@ export default {
       type: Array,
       required: true
     }
+  },
+  methods: {
+    loadMore() {}
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -35,7 +41,8 @@ td {
   display: inline-block;
   margin-right: 10px;
 }
-.list-enter-active, .list-leave-active {
+.list-enter-active,
+.list-leave-active {
   transition: all 1s;
 }
 .list-enter, .list-leave-to /* .list-leave-active до версии 2.1.8 */ {
@@ -47,7 +54,7 @@ button {
   margin-top: 20px;
   &.btnDisabled {
     cursor: default;
-    opacity: .6;
+    opacity: 0.6;
   }
 }
 </style>
