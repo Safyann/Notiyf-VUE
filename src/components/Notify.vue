@@ -7,7 +7,12 @@
         </td>
       </tr>
     </transition-group>
-    <button @click="loadMore" class="btn btnPrimary">Load more</button>
+    <button
+      class="btn btnPrimary"
+      @click="loadMore"
+      :disabled="maxLength === 0"
+      :class="{btnDisabled: maxLength === 0}"
+    >Load more</button>
   </table>
 </template>
 
@@ -19,8 +24,17 @@ export default {
       required: true
     }
   },
+  computed: {
+    maxLength() {
+      return this.$store.getters.getMessagesFilter.length;
+    }
+  },
   methods: {
-    loadMore() {}
+    loadMore() {
+      this.$store.dispatch("loadMessages").catch(err => {
+        console.log(err);
+      });
+    }
   }
 };
 </script>
