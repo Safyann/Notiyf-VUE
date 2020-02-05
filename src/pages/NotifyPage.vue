@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import notify from "../components/Notify";
 
 // UI
@@ -60,49 +59,26 @@ export default {
     notify,
     preloader
   },
-  data() {
-    return {
-      loading: true,
-      error: null
-    };
-  },
   mounted() {
-    this.getNotify();
+    this.getNotifyLazy();
   },
   computed: {
     messages() {
       return this.$store.getters.getMessagesMain;
+    },
+    loading() {
+      return this.$store.getters.getLoading;
+    },
+    error() {
+      return this.$store.getters.getError;
     }
   },
   methods: {
+    getNotifyLazy() {
+      this.$store.dispatch("getNotifyLazy");
+    },
     getNotify() {
-      this.loading = true;
-      axios
-        .get("https://tocode.ru/static/c/vue-pro/notifyApi.php")
-        .then(response => {
-          let res = response.data.notify,
-            messages = [],
-            messagesMain = [];
-
-          //filter
-          for (let i = 0; i < res.length; i++) {
-            if (res[i].main) {
-              messagesMain.push(res[i]);
-            } else {
-              messages.push(res[i]);
-            }
-          }
-
-          this.$store.dispatch("setMessages", messages);
-          this.$store.dispatch("setMessagesMain", messagesMain);
-        })
-        .catch(error => {
-          console.log(error);
-          this.error = "Network Error";
-        })
-        .finally(() => {
-          this.loading = false;
-        });
+      this.$store.dispatch("getNotify");
     }
   }
 };

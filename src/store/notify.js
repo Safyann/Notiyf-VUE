@@ -1,4 +1,5 @@
 import loadMore from "../assets/js/loadMore";
+import axios from "axios";
 
 export default {
   state: {
@@ -26,6 +27,39 @@ export default {
     loadMessages({ commit, getters }) {
       let res = getters.getMessagesFilter;
       commit("loadMessages", loadMore(res));
+    },
+    getNotify({ commit }) {
+      axios
+        .get("https://tocode.ru/static/c/vue-pro/notifyApi.php")
+        .then(response => {
+          let res = response.data.notify,
+            messages = [],
+            messagesMain = [];
+
+          // filter
+          for (let i = 0; i < res.length; i++) {
+            if (res[i].main) {
+              messagesMain.push(res[i]);
+            } else {
+              messages.push(res[i]);
+            }
+          }
+
+          commit("setMessagesMain", messagesMain);
+          commit("setMessages", messages);
+        })
+        .catch(error => {
+          console.log(error);
+          commit("setError", "Network Error");
+        })
+        .finally(() => {
+          commit("setLoading", false);
+        });
+    },
+    getNotifyLazy({ commit, dispatch }) {
+      setTimeout(() => {
+        dispatch("getNotify");
+      }, 1800);
     }
   },
   getters: {
